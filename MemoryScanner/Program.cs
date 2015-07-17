@@ -50,10 +50,11 @@ namespace MemoryScanner
             this.mode = value;
         }
 
-        public void setPID(String value) {
+        public void setPID(String value)
+        {
             int.TryParse(value, out this.pid);
         }
-  
+
         public void setIPaddr(String value)
         {
             this.ipaddr = value.ToString();
@@ -191,7 +192,7 @@ namespace MemoryScanner
                 }
                 return false;
             }
-        }                        
+        }
     }
 
     // main program class
@@ -276,7 +277,7 @@ namespace MemoryScanner
             System.Console.WriteLine("\\/    \\/\\___|_| |_| |_\\__/\\___\\__,_|_| |_| v1.1");
             System.Console.WriteLine("---- Written by Matt Lewis & Tom Watson, NCC Group 2015 ----\n");
         }
-          
+
         // usage
         public static void usage()
         {
@@ -303,8 +304,8 @@ namespace MemoryScanner
             System.Console.WriteLine("-o\t\twrite output to terminal");
             System.Console.WriteLine("delay\t\ttime to wait between each memchunk scan");
             System.Console.WriteLine("width\t\tamount of data to display before and after search term");
-            System.Console.WriteLine("search term\tstring to look for in memory (spaces allowed)");
-            System.Console.WriteLine("regex to look for in memory (e.g. 3[47][0-9]{13})");
+            System.Console.WriteLine("string\t\tto look for in memory (spaces allowed)");
+            System.Console.WriteLine("regex\t\tto look for in memory (e.g. 3[47][0-9]{13})");
         }
 
         // main method
@@ -331,10 +332,10 @@ namespace MemoryScanner
             }
 
             CliArgs myargs = new CliArgs();
-            
+
             if (args[0].ToString().Equals("-string") && args.Length >= 5)
             {
-                myargs.setRunType("string"); 
+                myargs.setRunType("string");
                 // sending results over a socket
                 if (args[1].ToString().Equals("-s"))
                 {
@@ -346,7 +347,7 @@ namespace MemoryScanner
                         myargs.setPortnum(args[4]);
                         myargs.setDelay(args[5]);
                         myargs.setPrePostFix(args[6]);
-                        myargs.setSearchTerm(args, 7);                   
+                        myargs.setSearchTerm(args, 7);
                         Console.WriteLine("Starting search for \"{0}\" on procid {1} sending output to {2}:{3} with delay of {4} and width of {5}", myargs.searchterm, myargs.pid.ToString(), myargs.ipaddr, myargs.portnum.ToString(), myargs.delay.ToString(), myargs.prepostfix.ToString());
                     }
                 }
@@ -503,9 +504,9 @@ namespace MemoryScanner
             // validate arguments, if good then off we go!
             if (myargs.isValid())
             {
-                switch(myargs.runType)
+                switch (myargs.runType)
                 {
-                    case "string": 
+                    case "string":
                         memScanString(myargs);
                         break;
                     case "regex":
@@ -569,8 +570,10 @@ namespace MemoryScanner
             System.IO.StreamWriter file = null;
 
             // writing output to socket
-            if(myargs.mode.Equals("socket")) {
-                try {
+            if (myargs.mode.Equals("socket"))
+            {
+                try
+                {
                     ipAddress = IPAddress.Parse(myargs.ipaddr);
                     remoteIP = new IPEndPoint(ipAddress, myargs.portnum);
                     sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -614,7 +617,7 @@ namespace MemoryScanner
                 MEMORY_BASIC_INFORMATION mem_basic_info = new MEMORY_BASIC_INFORMATION();
 
                 // number of bytes read with ReadProcessMemory
-                int bytesRead = 0;  
+                int bytesRead = 0;
 
                 // for some efficiencies, pre-compute prepostfix values
                 int postfix = myargs.searchterm.Length + (myargs.prepostfix * 2);
@@ -643,10 +646,11 @@ namespace MemoryScanner
                             {
                                 toSend += "0x" + (mem_basic_info.BaseAddress + idex).ToString() + ":A:" + memStringASCII.Substring(idex - myargs.prepostfix, postfix) + "\n";
 
-                                byte[] msg = Encoding.ASCII.GetBytes(toSend);
+                                
 
                                 if (myargs.mode.Equals("socket"))
                                 {
+                                    byte[] msg = Encoding.ASCII.GetBytes(toSend);
                                     int bytesSent = sender.Send(msg);
                                 }
                                 if (myargs.mode.Equals("file"))
@@ -662,7 +666,6 @@ namespace MemoryScanner
                                 toSend = "";
                                 idex++;
                             }
-
                         }
 
                         // does the search terms exist in this chunk in UNICODE form?
@@ -692,9 +695,7 @@ namespace MemoryScanner
                                 toSend = "";
                                 idex++;
                             }
-
                         }
-                       
                     }
 
                     // truffle shuffle - moving on chunk
@@ -816,7 +817,6 @@ namespace MemoryScanner
                                 toSend = "";
                                 idex++;
                             }
-
                         }
 
                         // does the regex pattern exist in this chunk in UNICODE form?
@@ -847,9 +847,7 @@ namespace MemoryScanner
                                 toSend = "";
                                 idex++;
                             }
-
                         }
-
                     }
 
                     // truffle shuffle - moving on chunk
@@ -990,7 +988,6 @@ namespace MemoryScanner
                         // does the regex pattern exist in this chunk in UNICODE form?
                         if (rgx.IsMatch(memStringUNICODE))
                         {
-
                             int idex = 0;
                             while (rgx.Match(memStringUNICODE, idex).Success)
                             {
@@ -1142,8 +1139,8 @@ namespace MemoryScanner
                                 {
                                     if (myargs.mode.Equals("socket"))
                                     {
-                                       byte[] msg = Encoding.ASCII.GetBytes(toSend);
-                                       int bytesSent = sender.Send(msg);
+                                        byte[] msg = Encoding.ASCII.GetBytes(toSend);
+                                        int bytesSent = sender.Send(msg);
                                     }
                                     if (myargs.mode.Equals("file"))
                                     {
@@ -1152,7 +1149,7 @@ namespace MemoryScanner
                                     if (myargs.mode.Equals("stdio"))
                                     {
                                         Console.WriteLine(toSend);
-                                    }         
+                                    }
                                 }
                                 // enter sandman
                                 System.Threading.Thread.Sleep(myargs.delay);
@@ -1180,20 +1177,20 @@ namespace MemoryScanner
                                 toSend += "\n" + potentialCC + "\t(" + potentialCCType + ")\t" + (luhnCheck(potentialCC) ? "\tLuhn check passed\n" : "\tLuhn check failed\n");
 
                                 if (capturedTracks.Add(toSend))
+                                {
+                                    if (myargs.mode.Equals("socket"))
                                     {
-                                        if (myargs.mode.Equals("socket"))
-                                        {
-                                            byte[] msg = Encoding.ASCII.GetBytes(toSend);
-                                            int bytesSent = sender.Send(msg);
-                                        }
-                                        if (myargs.mode.Equals("file"))
-                                        {
-                                            file.WriteLine(toSend);
-                                        }
-                                        if (myargs.mode.Equals("stdio"))
-                                        {
-                                            Console.WriteLine(toSend);
-                                        }
+                                        byte[] msg = Encoding.ASCII.GetBytes(toSend);
+                                        int bytesSent = sender.Send(msg);
+                                    }
+                                    if (myargs.mode.Equals("file"))
+                                    {
+                                        file.WriteLine(toSend);
+                                    }
+                                    if (myargs.mode.Equals("stdio"))
+                                    {
+                                        Console.WriteLine(toSend);
+                                    }
                                 }
                                 // enter sandman
                                 System.Threading.Thread.Sleep(myargs.delay);
