@@ -6,6 +6,14 @@ Written by Matt Lewis, NCC Group 2014
 Updated by Tom Watson, NCC Group 2015  
 Thanks to Jesse Bullock for lots of great ideas  
 
+Released as open source by NCC Group Plc - http://www.nccgroup.com/
+
+Developed by Matt Lewis and Tom Watson, matt [dot] lewis [at] nccgroup [dot] com & tom [dot] watson [at] nccgroup [dot] com
+
+http://www.github.com/nccgroup/memscan
+
+Released under AGPL, see LICENSE for more information
+
 Synopsis - keeps scanning a process memory space for a search string (unicode and ascii), regex pattern, credit card data or magnetic stripe data then if found, spits these out either to stdout, a file or a socket to a remote listener
 
 Useful for memory scraping a process, a post-exploitation POC or instrumentation tool to be used during fuzzing.  
