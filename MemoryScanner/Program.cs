@@ -39,6 +39,7 @@ namespace MemoryScanner
         public string searchterm = "";
         public string mode = "";
         public int prepostfix = -1;
+        public Process process = null;
 
         public void setRunType(String value)
         {
@@ -99,6 +100,16 @@ namespace MemoryScanner
         // validate the args
         public bool isValid()
         {
+            try 
+            {
+                process = Process.GetProcessById(pid);
+            }
+            catch
+            {
+                System.Console.WriteLine(pid + " does not appear to be a valid process id");
+                return false;
+            }
+
             if (this.runType.Equals("string") || this.runType.Equals("regex"))
             {
                 if (this.mode.Equals("stdio"))
@@ -199,7 +210,6 @@ namespace MemoryScanner
     static class ProgObj
     {
         // REQUIRED CONSTS
-
         const int PROCESS_QUERY_INFORMATION = 0x0400;
         const int MEM_COMMIT = 0x00001000;
         const int PAGE_READWRITE = 0x04;
@@ -223,10 +233,9 @@ namespace MemoryScanner
         // %B\\d{5,19}[\\^].{1,60}[?] Track 1 - Assuming a cc# length of 5-19 digits) (https://en.wikipedia.org/wiki/ISO/IEC_7813#Track_1)
         // ;\\d{5,19}=.{1,25}[?] Track 2 - Assuming a cc# length of 5-19 digits) (https://en.wikipedia.org/wiki/ISO/IEC_7813#Track_2)
         // These regexes could be better but work for now
-        readonly static String TRACKREGEX = "%B\\d{5,77}[\\^].{1,60}?[?]|;\\d{5,19}=.{1,25}?[?]";
+        readonly static String TRACKREGEX = "%B\\d{5,19}[\\^].{1,60}?[?]|;\\d{5,19}=.{1,25}?[?]";
 
         // REQUIRED METHODS
-
         [DllImport("kernel32.dll")]
         public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
@@ -239,9 +248,11 @@ namespace MemoryScanner
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
 
-        // REQUIRED STRUCTS
+        // process to be inspected
+        static Process process;
 
-        public struct MEMORY_BASIC_INFORMATION
+        // REQUIRED STRUCTS
+            public struct MEMORY_BASIC_INFORMATION
         {
             public int BaseAddress;
             public int AllocationBase;
@@ -504,6 +515,7 @@ namespace MemoryScanner
             // validate arguments, if good then off we go!
             if (myargs.isValid())
             {
+                process = Process.GetProcessById(myargs.pid);
                 switch (myargs.runType)
                 {
                     case "string":
@@ -608,7 +620,6 @@ namespace MemoryScanner
                 long proc_max_address_l = (long)proc_max_address;
 
                 String toSend = "";
-                Process process = Process.GetProcessById(myargs.pid);
 
                 // opening the process with desired access level
                 IntPtr processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_WM_READ, false, process.Id);
@@ -760,7 +771,6 @@ namespace MemoryScanner
                 long proc_max_address_l = (long)proc_max_address;
 
                 String toSend = "";
-                Process process = Process.GetProcessById(myargs.pid);
 
                 // opening the process with desired access level
                 IntPtr processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_WM_READ, false, process.Id);
@@ -915,7 +925,6 @@ namespace MemoryScanner
                 long proc_max_address_l = (long)proc_max_address;
 
                 String toSend = "";
-                Process process = Process.GetProcessById(myargs.pid);
 
                 // opening the process with desired access level
                 IntPtr processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_WM_READ, false, process.Id);
@@ -1088,7 +1097,6 @@ namespace MemoryScanner
                 long proc_max_address_l = (long)proc_max_address;
 
                 String toSend = "";
-                Process process = Process.GetProcessById(myargs.pid);
 
                 // opening the process with desired access level
                 IntPtr processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_WM_READ, false, process.Id);
