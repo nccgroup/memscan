@@ -447,7 +447,7 @@ namespace MemoryScanner
                         myargs.setIPaddr(args[3]);
                         myargs.setPortnum(args[4]);
                         myargs.setDelay(args[5]);
-                        Console.WriteLine("Starting search for credit card numbers on procid {0} sending output to {1}:{2} with delay of {4}", myargs.pid.ToString(), myargs.ipaddr, myargs.portnum.ToString(), myargs.delay.ToString());
+                        Console.WriteLine("Starting search for credit card numbers on procid {0} sending output to {1}:{2} with delay of {3}", myargs.pid.ToString(), myargs.ipaddr, myargs.portnum.ToString(), myargs.delay.ToString());
                     }
                 }
                 if (args[1].ToString().Equals("-f"))
@@ -486,7 +486,7 @@ namespace MemoryScanner
                         myargs.setIPaddr(args[3]);
                         myargs.setPortnum(args[4]);
                         myargs.setDelay(args[5]);
-                        Console.WriteLine("Starting search for magnetic stripe data on procid {0} sending output to {1}:{2} with delay of {4}", myargs.pid.ToString(), myargs.ipaddr, myargs.portnum.ToString(), myargs.delay.ToString());
+                        Console.WriteLine("Starting search for magnetic stripe data on procid {0} sending output to {1}:{2} with delay of {3}", myargs.pid.ToString(), myargs.ipaddr, myargs.portnum.ToString(), myargs.delay.ToString());
                     }
                 }
                 if (args[1].ToString().Equals("-f"))
