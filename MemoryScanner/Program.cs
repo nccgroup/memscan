@@ -655,7 +655,7 @@ namespace MemoryScanner
                             int idex = 0;
                             while ((idex = memStringASCII.IndexOf(myargs.searchterm, idex)) != -1)
                             {
-                                toSend += "0x" + (mem_basic_info.BaseAddress + idex).ToString() + ":A:" + memStringASCII.Substring(idex - myargs.prepostfix, postfix) + "\n";
+                                toSend += "0x" + (mem_basic_info.BaseAddress + idex).ToString("X4") + ":A:" + memStringASCII.Substring(idex - myargs.prepostfix, postfix) + "\n";
 
                                 
 
@@ -686,7 +686,7 @@ namespace MemoryScanner
                             int idex = 0;
                             while ((idex = memStringUNICODE.IndexOf(myargs.searchterm, idex)) != -1)
                             {
-                                toSend += "0x" + (mem_basic_info.BaseAddress + idex).ToString() + ":U:" + memStringUNICODE.Substring(idex - myargs.prepostfix, postfix) + "\n";
+                                toSend += "0x" + (mem_basic_info.BaseAddress + idex).ToString("X4") + ":U:" + memStringUNICODE.Substring(idex - myargs.prepostfix, postfix) + "\n";
 
                                 if (myargs.mode.Equals("socket"))
                                 {
@@ -807,7 +807,7 @@ namespace MemoryScanner
                             while (rgx.Match(memStringASCII, idex).Success)
                             {
                                 idex = rgx.Match(memStringASCII, idex).Index;
-                                toSend += "0x" + (mem_basic_info.BaseAddress + idex).ToString() + ":A:" + memStringASCII.Substring(idex - myargs.prepostfix, postfix) + "\n";
+                                toSend += "0x" + (mem_basic_info.BaseAddress + idex).ToString("X4") + ":A:" + memStringASCII.Substring(idex - myargs.prepostfix, postfix) + "\n";
 
                                 if (myargs.mode.Equals("socket"))
                                 {
@@ -837,7 +837,7 @@ namespace MemoryScanner
                             while (rgx.Match(memStringUNICODE, idex).Success)
                             {
                                 idex = rgx.Match(memStringUNICODE, idex).Index;
-                                toSend += "0x" + (mem_basic_info.BaseAddress + idex).ToString() + ":U:" + memStringUNICODE.Substring(idex - myargs.prepostfix, postfix) + "\n";
+                                toSend += "0x" + (mem_basic_info.BaseAddress + idex).ToString("X4") + ":U:" + memStringUNICODE.Substring(idex - myargs.prepostfix, postfix) + "\n";
 
                                 if (myargs.mode.Equals("socket"))
                                 {
